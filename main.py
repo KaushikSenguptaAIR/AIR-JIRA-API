@@ -73,9 +73,13 @@ def attach_to_jira():
         
         # Prepare JIRA API call
         url = f"{JIRA_BASE_URL}/rest/api/3/issue/{issue_key}/attachments"
+
+        # Create base64 encoded credentials for explicit Basic auth
+        credentials = base64.b64encode(f"{JIRA_USERNAME}:{JIRA_TOKEN}".encode()).decode()
         
         headers = {
-            'X-Atlassian-Token': 'no-check'
+            'X-Atlassian-Token': 'no-check',
+            'Authorization': f'Basic {credentials}'
         }
         
         files = {
