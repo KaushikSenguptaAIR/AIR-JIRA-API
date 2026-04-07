@@ -10,10 +10,10 @@ app = Flask(__name__)
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# JIRA Configuration
-JIRA_BASE_URL = "https://alfakher.atlassian.net"
-JIRA_USERNAME = "kaushik.sengupta@air.global"
-JIRA_TOKEN = "ATATT3xFfGF0ZjUsCPpmDPJY61G_LlkAi3QlZ8ny_7j_FNyBLF5CpRJqBQB9OpO4yRA_GGACy6eq2a0S46Je5LBDhk8w6JVDz9IKZ-oUAYI5fnq_SWjWNrDsbdkNCRUg-feeuAOK6GwF4hXvg2wZryUZGLJ5E_9kWmCVce9wvMyZOhECjcOuMqI=B01BA70F"
+# JIRA Configuration from environment variables
+JIRA_BASE_URL = os.environ.get('JIRA_BASE_URL', 'https://alfakher.atlassian.net')
+JIRA_USERNAME = os.environ.get('JIRA_USERNAME')
+JIRA_TOKEN = os.environ.get('JIRA_TOKEN')
 
 @app.route('/', methods=['GET'])
 def home():
@@ -38,6 +38,10 @@ def health_check():
 def attach_to_jira():
     """Main endpoint to attach files to JIRA tickets"""
     try:
+        # Check if credentials are configured
+        if not JIRA_USERNAME or not JIRA_TOKEN:
+            return jsonify({"error": "JIRA credentials not configured"}), 500
+        
         # Log incoming request
         logging.info("Received attachment request")
         
