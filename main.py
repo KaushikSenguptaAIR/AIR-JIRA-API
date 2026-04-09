@@ -72,7 +72,7 @@ def attach_to_jira():
             return jsonify({"error": f"Invalid base64 content: {str(e)}"}), 400
         
         # Prepare JIRA API call
-        url = f"{JIRA_BASE_URL}/rest/api/3/issue/{issue_key}/attachments"
+        url = f"{JIRA_BASE_URL}/rest/servicedeskapi/request/{issue_key}/attachment"
 
         # Create base64 encoded credentials for explicit Basic auth
         credentials = base64.b64encode(f"{JIRA_USERNAME}:{JIRA_TOKEN}".encode()).decode()
