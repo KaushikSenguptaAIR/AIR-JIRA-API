@@ -141,6 +141,30 @@ def test_endpoint():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+@app.route('/debug-jira', methods=['GET'])
+def debug_jira():
+    """Debug JIRA connectivity"""
+    try:
+        credentials = base64.b64encode(f"{JIRA_USERNAME}:{JIRA_TOKEN}".encode()).decode()
+        
+        # Test basic JIRA access
+        url = f"{JIRA_BASE_URL}/rest/api/3/issue/DITSD-322"
+        
+        headers = {
+            'Authorization': f'Basic {credentials}',
+            'Content-Type': 'application/json'
+        }
+        
+        response = requests.get(url, headers=headers, timeout=30)
+        
+        return jsonify({
+            "status": response.status_code,
+            "can_read_ticket": response.status_code == 200,
+            "response": response.text[:500] if response.status_code != 200 else "Success"
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
