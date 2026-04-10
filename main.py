@@ -148,7 +148,7 @@ def debug_jira():
         credentials = base64.b64encode(f"{JIRA_USERNAME}:{JIRA_TOKEN}".encode()).decode()
         
         # Test basic JIRA access
-        url = f"{JIRA_BASE_URL}/rest/servicedeskapi/servicedesk/76"
+        url = f"{JIRA_BASE_URL}/rest/servicedeskapi/info"
         
         headers = {
             'Authorization': f'Basic {credentials}',
